@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KBK STYLE v4.3：可調線條濾鏡版</title>
+  <title>KBK STYLE v4.3.1：線條即時切換修正版</title>
   <style>
     body {
       background-color: #173D50;
@@ -41,7 +42,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>KBK STYLE v4.3：可調線條濾鏡版</h2>
+    <h2>KBK STYLE v4.3.1：線條即時切換修正版</h2>
     <input type="file" id="imageInput" accept="image/*"/>
     <button onclick="openCamera()">啟動手機鏡頭</button>
     <button onclick="toggleMode()">切換濾鏡模式</button>
@@ -49,12 +50,12 @@
     <input type="text" id="filenameInput" placeholder="輸入檔名，例如：白醬_站姿"/>
     <div>
       線條粗細：
-      <select id="lineWidthSelect">
+      <select id="lineWidthSelect" onchange="redrawIfReady()">
         <option value="2">2px</option>
         <option value="4" selected>4px</option>
       </select>
       間距：
-      <select id="lineGapSelect">
+      <select id="lineGapSelect" onchange="redrawIfReady()">
         <option value="8" selected>8px</option>
         <option value="12">12px</option>
       </select>

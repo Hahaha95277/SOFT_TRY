@@ -31,6 +31,12 @@ function getLineOptions() {
   return { width, gap };
 }
 
+function redrawIfReady() {
+  if (currentImage) {
+    drawStylizedImage(currentImage);
+  }
+}
+
 function drawStylizedImage(img) {
   currentImage = img;
   canvas.width = 768;
