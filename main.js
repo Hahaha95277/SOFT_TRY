@@ -3,6 +3,8 @@ const imageInput = document.getElementById("imageInput");
 const canvas = document.getElementById("styledCanvas");
 const ctx = canvas.getContext("2d");
 
+let filterMode = "five"; // 預設為五階
+
 imageInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -54,15 +56,19 @@ function drawStylizedImage(img) {
       const brightness = 0.3 * r + 0.59 * g + 0.11 * b;
 
       let newColor;
-      if (brightness < 69) newColor = [23, 61, 80]; // 深藍
-      else if (brightness < 103) {
-        // 次暗過渡層：水平交錯深藍+金色
-        newColor = Math.floor(y / 8) % 2 === 0 ? [23, 61, 80] : [179, 150, 106];
-      } else if (brightness < 137) newColor = [179, 150, 106]; // 金色
-      else if (brightness < 171) {
-        // 次亮過渡層：水平交錯白色+金色
-        newColor = Math.floor(y / 8) % 2 === 0 ? [255, 255, 255] : [179, 150, 106];
-      } else newColor = [255, 255, 255]; // 白色
+      if (filterMode === "three") {
+        if (brightness < 85) newColor = [23, 61, 80];
+        else if (brightness < 170) newColor = [255, 255, 255];
+        else newColor = [179, 150, 106];
+      } else {
+        if (brightness < 69) newColor = [23, 61, 80];
+        else if (brightness < 103) {
+          newColor = Math.floor(y / 8) % 2 === 0 ? [23, 61, 80] : [179, 150, 106];
+        } else if (brightness < 137) newColor = [179, 150, 106];
+        else if (brightness < 171) {
+          newColor = Math.floor(y / 8) % 2 === 0 ? [255, 255, 255] : [179, 150, 106];
+        } else newColor = [255, 255, 255];
+      }
 
       [data[i], data[i + 1], data[i + 2]] = newColor;
     }
@@ -89,7 +95,14 @@ function roundRect(ctx, x, y, width, height, radius, fill) {
 
 function downloadImage() {
   const link = document.createElement("a");
-  link.download = "kbk_style_v4.png";
+  const now = new Date();
+  const timestamp = now.toISOString().replace(/[-:.]/g, "").slice(0, 15);
+  link.download = `kbk_style_${filterMode}_${timestamp}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+function toggleMode() {
+  filterMode = filterMode === "five" ? "three" : "five";
+  alert(`已切換為 ${filterMode === "five" ? "五階" : "三階"}濾鏡模式`);
 }
